@@ -39,10 +39,11 @@ It is mandatory that all the files of the family (sequences of the msa) containi
 Both the main _.contactbench_ file and the rest of the files corresponding to the same family should be located in the same directory. This directory must also be called as the FAMILY they belong.
 
 #### IDENTIFIERS FILE (OPTIONAL)
-This file is only needed just if the identifiers of the multiple sequence alignment are **not the same as the contact files** (for example, having the pfam identifiers in the alignment and the pdb identifier in the contact file).
+This file is only needed just if the identifiers of the multiple sequence alignment are **not the same as the contact files** (for example, having the pfam identifiers in the alignment and the pdb identifier in the contact file). It should be given to the program as the fourth argument, as in the following example:
 
-This file must be located in the **same directory** as the msa file and must have the name of the family followed by *_ref.template_list*.
-It should contain in each line first the identifier of the MSA followed by a second elements that separates them, and then the identifier of the contact file.
+**Example: python3 msa2cscore.py path/to/FAMILY.fa path/to/PROTEIN.contactbench OUTPUT.file path/to/FAMILY.idenfifiers**
+
+It must contain in each line first the identifier of the MSA followed by a second element that separates them, and then the identifier of the contact file.
 
 **Example: FAMILY_ref.template_list**
 
