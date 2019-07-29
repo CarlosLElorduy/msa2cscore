@@ -9,7 +9,7 @@ The code is executed using python and takes 3 arguments:
 
 ### Type of files
 #### MULTIPLE SEQUENCE ALIGNMENT FILE
-The MSA should be written in the following format:
+The MSA should be written in fasta format:
 
 ***>namesequence1***
 
@@ -65,11 +65,11 @@ _("path" is a directory inside the directory where msa2cscore.py is located)_
 ### Procedure
 Once the arguments are introduced and the program starts, it will first ask for a threshold for the pscore. This threshold specifies to the program that it should only take into account the contacts with equal or higher pscore. This value must be between 0-1.
 
-It also asks for the threshold of the cscore, so that in the final output, only contacts with a cscore higher than thi threshold will be written. Must also be between 0-1
+It also asks for the threshold of the cscore, so that in the final output, only contacts with a cscore higher than the threshold will be written. Must also be between 0-1
 
 The program asks if weights should be considered.
 If yes ('y'), the program will calculate the Voronoid weights using the multiple sequence alignment as input.
-In order to do this, the user must have installed SQUID, obtainable in the following link: http://eddylab.org/software.html
+In order to do this, the user must have installed SQUID, obtainable in the following link: http://eddylab.org/software.html and copied the binary file "weight" to a directory included in the PATH environmental variable.
 
 The program then asks if the alignment identifiers are the same as the same as the sequence contact files. If so, 'y' must be pressed and 'n' if not. If they are not the same and 'n' was pressed, the program will look for the "_ref.template_list" explained in the IDENTIFIER FILE section.
 
