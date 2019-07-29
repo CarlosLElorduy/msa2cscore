@@ -48,17 +48,6 @@ def getFamilyDirName(sequences_pathf):
     return (family_dirf,family_namef)
 
 
-# ==== ALIGNMENT DIRECTORIES ====
-# Returns the directory where the alignment fasta is located
-#   "/path/to/FAMILY.fa" --> "/path/to/"
-def getAligDir(alignment_fastaf):
-    alig_pos = -1
-    while alignment_fastaf[alig_pos]!='/':
-        alig_pos-=1
-    alig_dir = alignment_fastaf[:alig_pos]+'/'
-    return alig_dir
-
-
 # ==== READ ALIGNMENT ====
 # Returns:| aligf:         dictionary relating the name of the sequence with its respective alignment.
 #         | normal2aligff: for each protein, it relates each contact with the new contact according to the alignment.
@@ -218,9 +207,16 @@ if __name__=='__main__':
     # considerdifferent=False
 
   # ==== INPUTS ====
-    alignment_fasta  = cwd+'/'+sys.argv[1]                         # Path of the file containing the alignment                             /.../FAMILY.correct_aln.fa
+    alignment_fasta  = cwd+'/'+sys.argv[1]                          # Path of the file containing the alignment                             /.../FAMILY.correct_aln.fa
     protein_path     = cwd+'/'+sys.argv[2]                          # Path of the file containing the pscores and contacts of the proteins  /.../PROTEIN.contactbench
     name_output_file = cwd+'/'+sys.argv[3]                          # Name of the file where the cscores will be written
+    try:
+        ref_temp_list    = cwd+'/'+sys.argv[4]                      # File containing the mapping of the two types of identifiers used
+        considerdifferent= True
+    except:
+        ref_temp_list    = None
+        considerdifferent= False
+    
     threshold_p      = float(input('Select threshold for pscore (0-1): '))    # Threshold for the pvalue
     # Checking threshold being between 0-1
     while not 0<=threshold_p<=1:
@@ -243,18 +239,6 @@ if __name__=='__main__':
             weight_input=input('Consider Voronoid weights (y/n)? ')
 
 
-    considerdifferent=None
-    # msa_input=input('MSA with pfam or pdb identifier (pfam/pdb)? ')
-    msa_input=input('MSA identifiers same as Sequence_file identifier? (y/n) ')
-    while considerdifferent==None:
-        if msa_input.lower()=='n':
-            considerdifferent=True
-        elif msa_input.lower()=='y':
-            considerdifferent=False
-        else:
-            msa_input=input('MSA identifiers same as Sequence_file identifier? (y/n) ')
-    print()
-
   # ==== OBTAINING DIRECTORY NAMES AND NAMES ====
     protein_name, prot_position=getProteinNamePath(protein_path)
     sequences_path     = protein_path[:prot_position]               # Path of the family, which has all the sequences inside.
@@ -262,16 +246,14 @@ if __name__=='__main__':
     family_dir,family_name=getFamilyDirName(sequences_path)         # Family_dir: directory where the family is located. | Family_name: name of the family
     sequences_path    +='/'
     
-    alig_dir=getAligDir(alignment_fasta)
-    ref_temp_list   = alig_dir+family_name+'_ref.template_list'
   # =============================================
 
 
     ToF_ind=True                                                    # Flag to check if TRUE and FALSE contacts will be written in the output file
 
-    alig,normal2alig,pfam2pdb=readAlignment(alignment_fasta,ref_temp_list,considerdifferent) # Alig:        dictionary relating the name of the sequence with its alignment.
-                                                                                        # Normal2alig: dictionary relating the original contact with the changed one according to the alignment.
-                                                                                        # Pfam2pdb:    dictionary relating the pfam identifier with the pdb one. If pdb is already given in the alignment, the dictionary relates the name with itself (done to avoid rewritting extra code)
+    alig,normal2alig,pfam2pdb=readAlignment(alignment_fasta,ref_temp_list,considerdifferent)    # Alig:        dictionary relating the name of the sequence with its alignment.
+                                                                                                # Normal2alig: dictionary relating the original contact with the changed one according to the alignment.
+                                                                                                # Pfam2pdb:    dictionary relating the pfam identifier with the pdb one. If pdb is already given in the alignment, the dictionary relates the name with itself (done to avoid rewritting extra code)
     if considerWeights:
         protein2weight=getWeights(alignment_fasta,pfam2pdb)
 
